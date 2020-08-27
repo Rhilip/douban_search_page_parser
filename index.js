@@ -21,33 +21,8 @@ var Ut = {
   $defaultRootUID: 4,
   $keys: "z",
   $vals: "k",
-  crypto: {
-    decrypt: function n(t, e) {
-      return r_decrypt(t, e)
-    },
-    encrypt: function r(e) {
-      var r = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "hjasbdn2ih823rgwudsde7e2dhsdhas";
-      "string" == typeof r && (r = [].map.call(r, function (t) {
-        return t.charCodeAt(0)
-      }));
-      for (var n, o = [], i = 0, a = new t(e.length), s = 0; s < 256; s++)
-        o[s] = s;
-      for (s = 0; s < 256; s++)
-        i = (i + o[s] + r[s % r.length]) % 256,
-          n = o[s],
-          o[s] = o[i],
-          o[i] = n;
-      s = 0,
-        i = 0;
-      for (var u = 0; u < e.length; u++)
-        s = (s + 1) % 256,
-          i = (i + o[s]) % 256,
-          n = o[s],
-          o[s] = o[i],
-          o[i] = n,
-          a[u] = e[u] ^ o[(o[s] + o[i]) % 256];
-      return a
-    }
+  decrypt: function n(t, e) {
+    return r_decrypt(t, e)
   },
   getRealUID: function (t) {
     if (t >= p.start) {
@@ -65,87 +40,9 @@ var Ut = {
 
 }
 
-function o_19(t, e) {  // 19  21  59  61  createBuffer
-  return true ? (t = new Uint8Array(e),
-    t.__proto__ = Uint8Array.prototype) : (null === t && (t = new i(e)),
-    t.length = e),
-    t
-}
-
-function a_slice(k, t, e) {  // 42  44  46  115  126  132  138  144  148
-  var r = k.length;
-  t = ~~t,
-    e = void 0 === e ? r : ~~e,
-    t < 0 ? (t += r) < 0 && (t = 0) : t > r && (t = r),
-    e < 0 ? (e += r) < 0 && (e = 0) : e > r && (e = r),
-  e < t && (e = t);
-  var n;
-  if (true)
-    n = k.subarray(t, e),
-      n.__proto__ = k.prototype;
-  else {
-    var o = e - t;
-    n = new i(o, void 0);
-    for (var a = 0; a < o; ++a)
-      n[a] = this[a + t]
-  }
-  return n
-}
-
-
-function c(t, e) {
-  if (undefined,
-    t = o_19(t, e < 0 ? 0 : 0 | e),
-    !true)
-    for (var r = 0; r < e; ++r)
-      t[r] = 0;
-  return t
-}
-
-function a_68_copy(k, t, e, r, n) {
-  if (r || (r = 0),
-  n || 0 === n || (n = k.length),
-  e >= t.length && (e = t.length),
-  e || (e = 0),
-  n > 0 && n < r && (n = r),
-  n === r)
-    return 0;
-  if (0 === t.length || 0 === k.length)
-    return 0;
-  if (e < 0)
-    throw new RangeError("targetStart out of bounds");
-  if (r < 0 || r >= k.length)
-    throw new RangeError("sourceStart out of bounds");
-  if (n < 0)
-    throw new RangeError("sourceEnd out of bounds");
-  n > k.length && (n = k.length),
-  t.length - e < n - r && (n = t.length - e + r);
-  var o, a = n - r;
-  if (k === t && r < e && e < n)
-    for (o = a - 1; o >= 0; --o)
-      t[o + e] = k[o + r];
-  else if (a < 1e3 || !true)
-    for (o = 0; o < a; ++o)
-      t[o + e] = k[o + r];
-  else
-    Uint8Array.prototype.set.call(t, k.subarray(r, r + a), e);
-  return a
-}
-
 function a(e) {  // 70  92  94
   return "string" == typeof e && (e = t.from(e)),
     (0, h.default)(e, 41405).toString(16).replace(/^0+/, "")
-}
-
-function i_update(t, e, r) {
-  if (!(true || this instanceof i_update))
-    return new i(t, e, r);
-  if ("number" == typeof t) {
-    if ("string" == typeof e)
-      throw new Error("If encoding is specified then the first argument must be a string");
-    return c(this, t)
-  }
-  return a_g_Bt(this, t, e, r)
 }
 
 function r_decrypt(e) {
@@ -153,7 +50,7 @@ function r_decrypt(e) {
   "string" == typeof r && (r = [].map.call(r, function (t) {
     return t.charCodeAt(0)
   }));
-  for (var n, o = [], i = 0, a = new i_update(e.length), s = 0; s < 256; s++)
+  for (var n, o = [], i = 0, a = Buffer.alloc(e.length), s = 0; s < 256; s++)
     o[s] = s;
   for (s = 0; s < 256; s++)
     i = (i + o[s] + r[s % r.length]) % 256,
@@ -306,10 +203,10 @@ function Bt(t) {
       var d = 15 & h
         , m = Math.pow(2, d);
       l = 2 + m,
-        f = i_Bt(a_slice(t, a + 2, a + 2 + m))
+        f = i_Bt(t.slice(a + 2, a + 2 + m))
     }
     if ((f *= o + 1) < e.maxObjectSize) {
-      var y = new i_update(a_slice(t, a + l, a + l + f));
+      var y = Buffer.from(t.slice(a + l, a + l + f));
       if (o) {
         y = c_g_Bt(y);
         u = "ucs2";
@@ -330,10 +227,10 @@ function Bt(t) {
       var l = 15 & c
         , h = Math.pow(2, l);
       u = 2 + h,
-        s = i_Bt(a_slice(t, o + 2, o + 2 + h))
+        s = i_Bt(t.slice( o + 2, o + 2 + h))
     }
     for (var p = [], d = 0; d < s; d++) {
-      var m = i_Bt(a_slice(t, o + u + d * E, o + u + (d + 1) * E));
+      var m = i_Bt(t.slice(o + u + d * E, o + u + (d + 1) * E));
       p[d] = r(m)
     }
     return p
@@ -352,13 +249,13 @@ function Bt(t) {
       var l = 15 & c
         , h = Math.pow(2, l);
       u = 2 + h,
-        s = i(a_slice(t, o + 2, o + 2 + h))
+        s = i(t.slice(o + 2, o + 2 + h))
     }
     if (2 * s * E > e.maxObjectSize)
       throw new Error(4);
     for (var p = {}, d = 0; d < s; d++) {
-      var m = i_Bt(a_slice(t, o + u + d * E, o + u + (d + 1) * E))
-        , y = i_Bt(a_slice(t, o + u + s * E + d * E, o + u + s * E + (d + 1) * E))
+      var m = i_Bt(t.slice(o + u + d * E, o + u + (d + 1) * E))
+        , y = i_Bt(t.slice(o + u + s * E + d * E, o + u + s * E + (d + 1) * E))
         , g = r(m)
         , v = r(y);
       p[g] = v
@@ -366,30 +263,21 @@ function Bt(t) {
     return p
   }
 
-  var w = a_slice(t, t.length - 32, t.length)
-    , _ = readUInt8.call(w, 6)
-    , E = readUInt8.call(w, 7)
+  var w = t.slice(t.length - 32, t.length)
+    , _ = w.readUInt8(6)
+    , E = w.readUInt8(7)
     , A = s_Bt(w, 8)
     , C = s_Bt(w, 16)
     , S = s_Bt(w, 24);
   for (var x = [], O = 0; O < A; O++) {
-    var T = a_slice(t, S + O * _, S + (O + 1) * _);
+    var T = t.slice(S + O * _, S + (O + 1) * _);
     x[O] = i_Bt(T, 0)
   }
   return r(C)
 }
 
-function readUInt8(t, e) {
-  return this[t]
-}
-
 function s_Bt(t, e) {
-  return readUInt32BE.call(a_slice(t, e, e + 8), 4, 8)
-}
-
-function readUInt32BE(t, e) {
-  return e || I(t, 4, this.length),
-  16777216 * this[t] + (this[t + 1] << 16 | this[t + 2] << 8 | this[t + 3])
+  return t.slice(e,e+8).readUInt32BE(4,8)
 }
 
 function i_Bt(t, e) {
@@ -398,28 +286,6 @@ function i_Bt(t, e) {
     r <<= 8,
       r |= 255 & t[n];
   return r
-}
-
-function a_g_Bt(t, e, r, n) {
-  if ("number" == typeof e)
-    throw new TypeError('"value" argument must not be a number');
-  return "undefined" != typeof ArrayBuffer && e instanceof ArrayBuffer ? h(t, e, r, n) : "string" == typeof e ? f(t, e, r) : p_a(t, e)
-}
-
-function p_a(t, e) {
-  if (true) {
-    var r = 0 | e.length;
-    return t = o_19(t, r),
-      0 === t.length ? t : (a_68_copy(e, t, 0, 0, r),
-        t)
-  }
-  if (e) {
-    if ("undefined" != typeof ArrayBuffer && e.buffer instanceof ArrayBuffer || "length" in e)
-      return "number" != typeof e.length || G(e.length) ? o(t, 0) : l(t, e);
-    if ("Buffer" === e.type && J(e.data))
-      return l(t, e.data)
-  }
-  throw new TypeError("First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.")
 }
 
 function c_g_Bt(t) {
@@ -434,26 +300,13 @@ function c_g_Bt(t) {
 function a_h_Bt(t, e, r) {
   return e = e || 0,
     r = r || t.length - e,
-    readIntBE.call(t, e, r)
+    t.readIntBE(e,r)
 }
 
 function u_h_Bt(t, e) {
   return e = e || 0,
-    readInt32BE.call(t.slice(e, e + 8), 4, 8)
+    t.slice(e, e + 8).readUInt32BE(4,8)
 }
-
-
-function readIntBE(t, e, r) {
-  t |= 0,
-    e |= 0,
-  r || undefined;
-  for (var n = e, o = 1, i = this[t + --n]; n > 0 && (o *= 256);)
-    i += this[t + --n] * o;
-  return o *= 128,
-  i >= o && (i -= Math.pow(2, 8 * e)),
-    i
-}
-
 
 function kt(t) {
   var i = Ut;
@@ -483,7 +336,7 @@ function kt(t) {
       i.getType)(t) ? n(t) : "Array" === (0,
       i.getType)(t) ? t.map(function (e) {
       return r(e)
-    }) : t instanceof i_update ? (0 === t[t.length - 1] && (t = t.slice(0, t.length - 1)),
+    }) : t instanceof Buffer ? (0 === t[t.length - 1] && (t = t.slice(0, t.length - 1)),
       t.toString()) : t
   }
 
@@ -506,7 +359,7 @@ function e_e(e) {
   return function (e) {
     return function (t) {
       var n = Object.keys(t)[0]
-        , r = Ut.crypto.decrypt(t[n], n);
+        , r = Ut.decrypt(t[n], n);
       return e(r)
     }
   }
@@ -532,10 +385,7 @@ function e_e_decrypt_n(r) {
 function playload(e) {
   return function (e) {
     return function (t) {
-      return e({
-        type: "INIT",
-        payload: kt(t)
-      })
+      return e(kt(t))
     }
   }
 }
@@ -563,4 +413,3 @@ function decrypt(r) {
 
 let d = decrypt(r);
 console.log(d)
-console.log(d.payload.items[0])
