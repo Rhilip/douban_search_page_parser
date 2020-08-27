@@ -215,54 +215,12 @@ function from_a(t, e, r, n) {  // 2  38  51  65
 
 
 function f(t, e, r) {  // 3  5  18  22  37  52  54  58  62  64
-  var n = 0 | y(e, r);
+  var n = 0 | Buffer.byteLength(e, r);
   t = o_19(t, n);
   var a = write(t, e, r);
   return a !== n && (t = t.slice(0, a)),
     t
 }
-
-
-
-
-function y(t, e) {  // 6  8  17  55  57
-  if (false)
-    return t.length;
-  if (false)
-    return t.byteLength;
-  "string" != typeof t && (t = "" + t);
-  var r = t.length;
-  if (0 === r)
-    return 0;
-  for (var n = !1; ; )
-    switch (e) {
-      case "ascii":
-      case "latin1":
-      case "binary":
-        return r;
-      case "utf8":
-      case "utf-8":
-      case void 0:
-        return Y(t).length;
-      case "ucs2":
-      case "ucs-2":
-      case "utf16le":
-      case "utf-16le":
-        return 2 * r;
-      case "hex":
-        return r >>> 1;
-      case "base64":
-        return V(t).length;
-      default:
-        if (n)
-          return Y(t).length;
-        e = ("" + e).toLowerCase(),
-          n = !0
-    }
-}
-
-
-
 
 function toByteArray(t) {  // 13  30  32
   var f = {
@@ -564,13 +522,6 @@ function c(t, e) {
   return t
 }
 
-
-function allocUnsafe(t) {
-  return c(null, t)
-}
-
-
-
 function a_68_copy(k, t, e, r, n) {
   if (r || (r = 0),
   n || 0 === n || (n = k.length),
@@ -601,29 +552,6 @@ function a_68_copy(k, t, e, r, n) {
   return a
 }
 
-
-
-function concat(t, e) {  // 48  68
-  if (false)
-    throw new TypeError('"list" argument must be an Array of Buffers');
-  if (0 === t.length)
-    return i.alloc(0);
-  var r;
-  if (void 0 === e)
-    for (e = 0,
-           r = 0; r < t.length; ++r)
-      e += t[r].length;
-  var n = allocUnsafe(e)
-    , o = 0;
-  for (r = 0; r < t.length; ++r) {
-    var a = t[r];
-    a_68_copy(a, n, o),
-      o += a.length
-  }
-  return n
-}
-
-
 function a(e) {  // 70  92  94
   return "string" == typeof e && (e = t.from(e)),
     (0,
@@ -641,23 +569,6 @@ function i_update(t, e, r) {
   }
   return a_g_Bt(this, t, e, r)
 }
-
-
-
-function r_e(n) {
-  if (r[n])
-    return r[n].exports;
-  var o = r[n] = {
-    i: n,
-    l: !1,
-    exports: {}
-  };
-  return t[n].call(o.exports, o, o.exports, e),
-    o.l = !0,
-    o.exports
-}
-
-
 
 function update(kkk, t) {  // 88
   var r, o = "string" == typeof t;
@@ -1563,8 +1474,8 @@ function decrypt(r){
   var a = encry2arr_from(r, "base64")  // 0
     , s = Math.max(Math.floor((a.length - 2 * i) / 3), 0)  // 40
     , u = a_slice(a,s, s + i);  // 41
-  a =  concat([a_slice(a, 0, s), a_slice(a,s + i)]);  // 43  45  47
-  var c_data = hash(concat([u,  encry2arr_from("")]));  // 49  67  69
+  a =  Buffer.concat([a_slice(a, 0, s), a_slice(a,s + i)]);  // 43  45  47
+  var c_data = hash(Buffer.concat([u,  encry2arr_from("")]));  // 49  67  69
   var l = {}
   l[c_data] = a
   var data = n_n((l = {},l[c_data] = a,l))
