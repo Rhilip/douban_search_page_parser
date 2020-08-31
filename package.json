@@ -1,0 +1,11 @@
+{
+  "name": "douban_search_page_parser",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {
+    "big-integer": "^1.6.48",
+    "xxhashjs": "^0.2.2"
+  }
+}
